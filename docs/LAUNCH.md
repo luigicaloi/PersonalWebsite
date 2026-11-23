@@ -16,14 +16,14 @@ whois luigicaloi.com | grep -iE 'Registrar:|Expiry|Status'
 ## 2. Cloudflare hosting (can be done before the transfer finishes)
 Cloudflare now calls Pages "legacy", so the site runs as a static-assets **Worker** (config in `wrangler.jsonc`).
 - [x] Create a free Cloudflare account.
-- [ ] **Compute → Workers & Pages → Create → Connect GitHub** → choose `luigicaloi/PersonalWebsite`.
+- [x] **Compute → Workers & Pages → Create → Connect GitHub** → choose `luigicaloi/PersonalWebsite`.
   - Project name: `luigicaloi`
   - Build command: `npm run build:checked`
   - Deploy command: `npx wrangler deploy`
-  - Build variable: `NODE_VERSION` = `24`
-- [ ] Open the `*.workers.dev` address Cloudflare shows, click through all pages, and test the redirects:
+  - Node version: pinned to 24 by `.node-version` in the repo
+- [x] Open https://luigicaloi.luigicaloi.workers.dev, click through all pages, and test the redirects (all checked Nov 23: pages 200, old Wix URLs 301, AI crawlers 200):
 ```bash
-for p in /teaching-1 /items/x /_files/ugd/50b58f_caed96a1bb484ccf8dcd8a137e6090c7.pdf; do curl -sI "https://<your-workers.dev-address>$p" | grep -iE '^(HTTP|location)'; done
+for p in /teaching-1 /items/x /_files/ugd/50b58f_caed96a1bb484ccf8dcd8a137e6090c7.pdf; do curl -sI "https://luigicaloi.luigicaloi.workers.dev$p" | grep -iE '^(HTTP|location)'; done
 ```
 - [ ] Turn on Web Analytics for the Worker (free, no cookies).
 
