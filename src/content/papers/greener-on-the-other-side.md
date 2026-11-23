@@ -13,9 +13,9 @@ coauthors:
   - name: Joana Naritomi
     url: https://joananaritomi.com/
   - name: Laura Zoratto
-dateText: May 2025
-extraLine: "[Paper.](/files/papers/greener-on-the-other-side.pdf) May 2025"
-dateModified: 2025-05
+dateText: July 2026
+extraLine: "[Paper.](/files/papers/greener-on-the-other-side.pdf) July 2026"
+dateModified: 2026-07-31
 image: ../../assets/images/greener-on-the-other-side.png
 imageAlt: Street in Manaus, Brazil, split by the boundary between two property-tax sectors with different tax rates
 keywords: [property tax, tax compliance, inequity, tagging, boundary discontinuity, Manaus, Brazil, public economics]

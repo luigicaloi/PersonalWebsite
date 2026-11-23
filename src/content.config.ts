@@ -1,4 +1,5 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 const link = z.string().refine((s) => s.startsWith('/') || /^https?:\/\//.test(s), 'must be a /path or http(s) URL');
@@ -12,7 +13,7 @@ const papers = defineCollection({
         status: z.enum(['published', 'working', 'wip']),
         order: z.number().int(),
         link: link.optional(),
-        coauthors: z.array(z.object({ name: z.string(), url: z.string().url().optional() })).default([]),
+        coauthors: z.array(z.object({ name: z.string(), url: z.url().optional() })).default([]),
         // Optional explicit author order (full names, including Luigi Caloi). Default: alphabetical by surname.
         authorOrder: z.array(z.string()).optional(),
         dateText: z.string().optional(),

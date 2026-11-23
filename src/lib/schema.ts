@@ -19,7 +19,7 @@ export function personNode() {
     alternateName: person.alternateName,
     url: `${site.url}/`,
     image: PROFILE_IMAGE,
-    jobTitle: person.jobTitle,
+    jobTitle: person.jobTitleFull,
     description: site.description,
     worksFor: { '@type': 'CollegeOrUniversity', name: person.affiliation.name, url: person.affiliation.url },
     affiliation: { '@type': 'CollegeOrUniversity', name: person.affiliation.name, url: person.affiliation.url },

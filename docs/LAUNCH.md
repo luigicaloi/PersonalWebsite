@@ -4,7 +4,7 @@ Order matters. The domain is at Wix until the Porkbun transfer finishes; the sit
 
 ## 1. Domain transfer (started Nov 23, 2026)
 - [x] Wix → Domains → luigicaloi.com: transfer lock off, EPP (authorization) code requested. WHOIS shows status `ok` (unlocked).
-- [ ] Porkbun: create account → **Domain Transfer** → `luigicaloi.com` + EPP code → pay (~$11, adds 1 year). Keep WHOIS privacy on.
+- [x] Porkbun: create account → **Domain Transfer** → `luigicaloi.com` + EPP code → pay (~$11, adds 1 year). Keep WHOIS privacy on.
 - [ ] Approve the transfer if Wix or Porkbun emails a confirmation link (otherwise it completes automatically in up to 5 days).
 - [ ] **Fallback:** if `whois luigicaloi.com` doesn't show Porkbun by **Nov 27**, renew the domain at Wix for 1 year (the year carries over when the transfer finishes). Don't edit the domain's contact info at Wix (that triggers a 60-day transfer lock).
 

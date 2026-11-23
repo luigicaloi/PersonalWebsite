@@ -15,6 +15,8 @@ export const person = {
   name: 'Luigi Caloi',
   alternateName: 'Luigi Beneduci Caloi',
   jobTitle: 'Assistant Professor',
+  // Used in structured data (matches the CV: "Assistant Professor in Economics").
+  jobTitleFull: 'Assistant Professor of Economics',
   affiliation: { name: 'Insper', url: 'https://www.insper.edu.br/en/home' },
   phd: { school: 'Columbia University', url: 'https://www.columbia.edu/', date: 'May 2026' },
   fields: ['Public economics', 'Development economics'],
@@ -42,7 +44,10 @@ export const person = {
   cv: '/files/cv.pdf',
   // Profiles elsewhere (Google Scholar, ORCID, RePEc, LinkedIn, Insper page...).
   // These help search engines and AI tools know they're all the same person.
-  sameAs: [] as string[],
+  sameAs: [
+    'https://www.insper.edu.br/pt/docentes/luigi-beneduci-caloi',
+    'https://www.linkedin.com/in/luigi-caloi/',
+  ] as string[],
 };
 
 export const pages = {

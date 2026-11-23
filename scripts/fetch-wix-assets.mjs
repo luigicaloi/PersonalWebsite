@@ -1,5 +1,9 @@
-// One-time script: downloads the original images from the old Wix site and
+// One-time script (Nov 2026): downloads the original images from the old Wix site and
 // applies the same crops Wix used, so the new site shows identical pictures.
+// Since then: the profile photo and markups figure match Luigi's Dropbox originals;
+// the Manaus photo was re-cut from the writing project's figures/AmuMDxfb.png (same crop);
+// the transfers chart was replaced by panel (a) of d10_split_score.pdf from the
+// SelectionMeritocracy project (the headline test-score event study).
 // Run with: node scripts/fetch-wix-assets.mjs
 import sharp from 'sharp';
 import { writeFile, mkdir } from 'node:fs/promises';
@@ -12,7 +16,6 @@ const images = [
   { id: '50b58f_a25113e65ee7441c912129d3c7ed06e0~mv2.jpg', out: 'profile.jpg' },
   { id: '50b58f_d8578269d75a4063b45de761beb82874~mv2.png', out: 'endogenous-firm-competition.png', crop: [126, 75, 1587, 1197] },
   { id: '50b58f_ff63c34e959a4b97b371219ecdc63bbd~mv2.png', out: 'greener-on-the-other-side.png', crop: [244, 0, 867, 653] },
-  { id: '50b58f_15ef2ea9b4d74433b35f7c4683bd91ce~mv2.png', out: 'with-or-without-conditions.png', crop: [747, 0, 2071, 1560] },
 ];
 
 await mkdir(OUT, { recursive: true });
