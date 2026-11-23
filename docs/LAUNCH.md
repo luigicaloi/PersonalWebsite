@@ -14,19 +14,18 @@ whois luigicaloi.com | grep -iE 'Registrar:|Expiry|Status'
 ```
 
 ## 2. Cloudflare hosting (can be done before the transfer finishes)
-- [ ] Create a free Cloudflare account.
-- [ ] **Workers & Pages → Create → Pages → Connect to Git** → choose `luigicaloi/PersonalWebsite`.
-  - Project name: `luigicaloi` (site appears at `https://luigicaloi.pages.dev`)
-  - Production branch: `main`
-  - Framework preset: Astro
+Cloudflare now calls Pages "legacy", so the site runs as a static-assets **Worker** (config in `wrangler.jsonc`).
+- [x] Create a free Cloudflare account.
+- [ ] **Compute → Workers & Pages → Create → Connect GitHub** → choose `luigicaloi/PersonalWebsite`.
+  - Project name: `luigicaloi`
   - Build command: `npm run build:checked`
-  - Build output directory: `dist`
-  - Environment variable: `NODE_VERSION` = `24`
-- [ ] Open `https://luigicaloi.pages.dev`, click through all pages, and test the redirects:
+  - Deploy command: `npx wrangler deploy`
+  - Build variable: `NODE_VERSION` = `24`
+- [ ] Open the `*.workers.dev` address Cloudflare shows, click through all pages, and test the redirects:
 ```bash
-for p in /teaching-1 /items/x /_files/ugd/50b58f_caed96a1bb484ccf8dcd8a137e6090c7.pdf; do curl -sI "https://luigicaloi.pages.dev$p" | grep -iE '^(HTTP|location)'; done
+for p in /teaching-1 /items/x /_files/ugd/50b58f_caed96a1bb484ccf8dcd8a137e6090c7.pdf; do curl -sI "https://<your-workers.dev-address>$p" | grep -iE '^(HTTP|location)'; done
 ```
-- [ ] Pages project → **Metrics → Web Analytics → Enable** (free, no cookies).
+- [ ] Turn on Web Analytics for the Worker (free, no cookies).
 
 ## 3. Cloudflare DNS zone (prepare before the transfer finishes)
 - [ ] **Add a domain** → `luigicaloi.com` → Free plan. Cloudflare imports Wix's current records; leave them for now.
@@ -40,8 +39,9 @@ for p in /teaching-1 /items/x /_files/ugd/50b58f_caed96a1bb484ccf8dcd8a137e6090c
 ## 4. Cutover (when Porkbun shows the domain as yours)
 - [ ] Porkbun → luigicaloi.com → **Authoritative nameservers** → replace with the two Cloudflare nameservers.
 - [ ] Wait for Cloudflare to mark the zone **Active** (minutes to a few hours).
-- [ ] Pages project → **Custom domains** → add `www.luigicaloi.com`, then `luigicaloi.com`. Cloudflare replaces the old Wix records automatically; delete any leftover A records pointing to `185.230.63.*` or CNAME to `wixdns.net`.
+- [ ] Worker `luigicaloi` → **Settings → Domains & Routes → Add → Custom domain** → add `www.luigicaloi.com`, then `luigicaloi.com`. Cloudflare replaces the old Wix records automatically; delete any leftover A records pointing to `185.230.63.*` or CNAME to `wixdns.net`.
 - [ ] Rules → **Redirect Rules** → template "Redirect from root to WWW": `luigicaloi.com/*` → `https://www.luigicaloi.com/${1}`, 301, preserve query string.
+- [ ] Worker → Settings → Domains & Routes: turn **off** the `workers.dev` and preview URLs, so only www.luigicaloi.com is indexed.
 - [ ] Verify:
 ```bash
 curl -sI http://luigicaloi.com | grep -iE '^(HTTP|location)'

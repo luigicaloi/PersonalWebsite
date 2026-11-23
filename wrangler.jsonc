@@ -1,0 +1,13 @@
+// Cloudflare Workers static-assets config: serves the built site from dist/.
+// Cloudflare builds on every push to main with `npm run build:checked`, then runs `npx wrangler deploy`.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "luigicaloi",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    // /research serves research.html; /research.html redirects to /research.
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}

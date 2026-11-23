@@ -10,7 +10,3 @@
 
 /files/*
   Cache-Control: public, max-age=3600
-
-# Keep the *.pages.dev copy out of search results; only www.luigicaloi.com should rank.
-https://:project.pages.dev/*
-  X-Robots-Tag: noindex
