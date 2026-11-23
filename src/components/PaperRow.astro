@@ -1,0 +1,149 @@
+---
+import { Image } from 'astro:assets';
+import { inlineMd, joinNames, isExternal, escapeHtml } from '../lib/inline-md';
+import { abstractOf, type Paper } from '../lib/papers';
+
+interface Props {
+  paper: Paper;
+}
+const { paper } = Astro.props;
+const d = paper.data;
+const abstract = abstractOf(paper);
+const ext = (href?: string) => (href && isExternal(href) ? { target: '_blank', rel: 'noopener' } : {});
+const authorLinks = d.coauthors.map((c) =>
+  c.url ? `<a href="${escapeHtml(c.url)}" target="_blank" rel="noopener">${escapeHtml(c.name)}</a>` : escapeHtml(c.name),
+);
+const coauthorHtml = d.coauthors.length ? `With ${joinNames(authorLinks)}${d.dateText ? `. ${escapeHtml(d.dateText)}` : ''}` : '';
+const secondLine = d.venueLine ?? d.extraLine ?? '';
+const abstractId = `abstract-${paper.id}`;
+---
+
+<article class="paper" id={paper.id}>
+  {
+    d.image && (
+      <div class="thumb">
+        <Image src={d.image} alt={d.imageAlt ?? ''} width={316} height={238} densities={[1, 2]} fit="cover" />
+      </div>
+    )
+  }
+  <div class="body">
+    <h3 class="title">
+      {d.link ? <a href={d.link} {...ext(d.link)}>{d.title}</a> : d.title}
+    </h3>
+    {coauthorHtml && <p class="coauthors" set:html={coauthorHtml} />}
+    <p class="second" set:html={inlineMd(secondLine)} />
+    {
+      abstract && (
+        <>
+          <p class="abstract" id={abstractId}>
+            Abstract: {abstract}
+          </p>
+          <button class="toggle" type="button" aria-expanded="false" aria-controls={abstractId}>
+            Read more
+          </button>
+        </>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .paper {
+    display: grid;
+    grid-template-columns: 316px minmax(0, 961px);
+    column-gap: 66px;
+    padding-left: 8px;
+    align-items: start;
+  }
+
+  .thumb :global(img) {
+    width: 316px;
+    height: 238px;
+    object-fit: cover;
+  }
+
+  .title {
+    font-size: 30px;
+    line-height: 1.22;
+  }
+
+  .title a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+
+  .coauthors {
+    margin-top: 14px;
+    font-size: 14px;
+    line-height: 25.2px;
+    padding-left: 2px;
+  }
+
+  .second {
+    font-size: 16px;
+    line-height: 28.8px;
+    min-height: 28.8px;
+    padding-left: 2px;
+  }
+
+  .coauthors :global(a),
+  .second :global(a) {
+    text-decoration: underline;
+  }
+
+  .abstract {
+    margin-top: 29px;
+    max-width: 929px;
+    font-family: var(--avenir);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    overflow: hidden;
+  }
+
+  .paper.expanded .abstract {
+    display: block;
+    -webkit-line-clamp: unset;
+    line-clamp: none;
+  }
+
+  .toggle {
+    margin-top: 10px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text);
+    font-family: var(--avenir);
+    font-weight: 800;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .toggle:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 900px) {
+    .paper {
+      grid-template-columns: 1fr;
+      row-gap: 20px;
+      padding-left: 0;
+    }
+
+    .thumb :global(img) {
+      width: 100%;
+      max-width: 316px;
+      height: auto;
+      aspect-ratio: 316 / 238;
+    }
+
+    .title {
+      font-size: 24px;
+    }
+  }
+</style>

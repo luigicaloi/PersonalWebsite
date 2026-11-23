@@ -1,0 +1,6 @@
+{
+  "$comment": "Copy to papers.sources.json (git-ignored) and point each entry at the latest PDF on your computer. `npm run sync:papers` copies them into public/files/. Paths may start with ~/.",
+  "cv": "~/path/to/CV.pdf",
+  "papers/greener-on-the-other-side": "~/Documents/GitHub/<project>/<paper>.pdf",
+  "papers/with-or-without-conditions": "~/Documents/GitHub/<project>/<paper>.pdf"
+}

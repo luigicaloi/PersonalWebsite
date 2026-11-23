@@ -1,0 +1,10 @@
+# Old Wix URLs -> new URLs (permanent, so search engines move their ranking over).
+/teaching-1   /teaching   301
+/items        /research   301
+/items/*      /research   301
+
+# PDFs that used to live on Wix's file storage. Links people saved keep working.
+/_files/ugd/50b58f_caed96a1bb484ccf8dcd8a137e6090c7.pdf   /files/cv.pdf   301
+/_files/ugd/50b58f_4db1d4ec03294fc5bcbeba5a89138ad0.pdf   /files/papers/greener-on-the-other-side.pdf   301
+/_files/ugd/50b58f_31ff9299a0dc4148af479c832cb26a95.pdf   /files/papers/greener-on-the-other-side.pdf   301
+/_files/ugd/50b58f_6def46c6db304d1d81afad702b119709.pdf   /files/papers/with-or-without-conditions.pdf   301

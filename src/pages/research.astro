@@ -1,0 +1,102 @@
+---
+import Base from '../layouts/Base.astro';
+import PaperRow from '../components/PaperRow.astro';
+import WipItem from '../components/WipItem.astro';
+import { pages } from '../data/site';
+import { getPapers, sections } from '../lib/papers';
+import { graph, pageNode, paperNode, personNode } from '../lib/schema';
+
+const page = pages.research;
+const papers = await getPapers();
+const jsonLd = graph(
+  pageNode('CollectionPage', page.path, page.title, page.description, {
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: papers.map((p, i) => ({ '@type': 'ListItem', position: i + 1, item: paperNode(p) })),
+    },
+  }),
+  personNode(),
+);
+
+// Vertical padding of each gray band, as measured on the Wix site.
+const pad = { published: '55px 0 65px', working: '70px 0 74px', wip: '43px 0 44px' } as const;
+---
+
+<Base title={page.title} description={page.description} path={page.path} jsonLd={jsonLd}>
+  <h1 class="visually-hidden">Research</h1>
+  {
+    sections.map((s) => {
+      const items = papers.filter((p) => p.data.status === s.status);
+      if (!items.length) return null;
+      return (
+        <>
+          <section class="band-white heading-band" aria-labelledby={`h-${s.status}`}>
+            <div class="container">
+              <h2 id={`h-${s.status}`}>{s.heading}</h2>
+            </div>
+          </section>
+          <section class="band-gray" style={`padding:${pad[s.status]}`}>
+            <div class={`container list list-${s.status}`}>
+              {items.map((p) => (s.status === 'wip' ? <WipItem paper={p} /> : <PaperRow paper={p} />))}
+            </div>
+          </section>
+        </>
+      );
+    })
+  }
+</Base>
+
+<script>
+  for (const btn of document.querySelectorAll<HTMLButtonElement>('.toggle')) {
+    btn.addEventListener('click', () => {
+      const row = btn.closest('.paper');
+      const open = row?.classList.toggle('expanded') ?? false;
+      btn.setAttribute('aria-expanded', String(open));
+      btn.textContent = open ? 'Read less' : 'Read more';
+    });
+  }
+</script>
+
+<style>
+  /* Wix placed this content 702px left of the page centre. */
+  .container {
+    margin-left: max(16px, calc(50% - 702px));
+    margin-right: 16px;
+    max-width: 1351px;
+  }
+
+  .heading-band {
+    padding: 43px 0 45px;
+  }
+
+  h2 {
+    padding-left: 10px;
+    font-size: 35px;
+    line-height: 49px;
+  }
+
+  .list {
+    display: grid;
+    row-gap: 75px;
+  }
+
+  .list-wip {
+    row-gap: 22px;
+  }
+
+  @media (max-width: 900px) {
+    .heading-band {
+      padding: 28px 0;
+    }
+
+    h2 {
+      padding-left: 0;
+      font-size: 28px;
+      line-height: 38px;
+    }
+
+    .list {
+      row-gap: 48px;
+    }
+  }
+</style>

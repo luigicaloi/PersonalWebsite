@@ -1,0 +1,134 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { pages, person } from '../data/site';
+import { graph, personNode, websiteNode, pageNode, PERSON_ID } from '../lib/schema';
+import profile from '../assets/images/profile.jpg';
+
+const page = pages.home;
+const jsonLd = graph(
+  websiteNode(),
+  pageNode('ProfilePage', '/', page.title, page.description, { mainEntity: { '@id': PERSON_ID } }),
+  personNode(),
+);
+---
+
+<Base title={page.title} description={page.description} path={page.path} jsonLd={jsonLd} type="profile">
+  <section class="hero band-gray">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <h1>{person.name}</h1>
+        <h2>About me</h2>
+        <div class="bio">
+          <p>
+            I am an {person.jobTitle} at <a href={person.affiliation.url} target="_blank" rel="noopener">{person.affiliation.name}.</a> My research interests are in public and development economics, in which I study the design of transfer systems, and industrial policies.
+          </p>
+          <p>
+            I obtained my Ph.D. from <a href={person.phd.url} target="_blank" rel="noopener">{person.phd.school}</a> in {person.phd.date}.
+          </p>
+        </div>
+      </div>
+      <div class="hero-photo">
+        <Image
+          src={profile}
+          alt={`Portrait of ${person.name}`}
+          widths={[480, 640, 800, 1068]}
+          sizes="(max-width: 900px) 100vw, 50vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding-top: 81px;
+  }
+
+  .hero-inner {
+    margin: 0 var(--inset);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 619px;
+  }
+
+  .hero-text {
+    padding: 19px 0 40px 22px;
+    max-width: calc(453px + 22px);
+  }
+
+  h1 {
+    font-size: 60px;
+    line-height: 78px;
+    letter-spacing: 0.03em;
+  }
+
+  h2 {
+    margin-top: 29px;
+    font-size: 27px;
+    line-height: 37.8px;
+    letter-spacing: 0.05em;
+  }
+
+  .bio {
+    margin-top: 42px;
+    /* 440px reproduces Wix's line breaks with this build of Montserrat. */
+    max-width: 440px;
+    font-size: 16px;
+    line-height: 30.4px;
+    letter-spacing: 0.03em;
+  }
+
+  .bio p + p {
+    margin-top: 4px;
+  }
+
+  .hero-photo {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-photo :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      padding-top: 32px;
+    }
+
+    .hero-inner {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+
+    .hero-text {
+      padding: 0 0 32px;
+    }
+
+    h1 {
+      font-size: 44px;
+      line-height: 56px;
+    }
+
+    h2 {
+      margin-top: 16px;
+      font-size: 24px;
+    }
+
+    .bio {
+      margin-top: 20px;
+    }
+
+    .hero-photo {
+      aspect-ratio: 1068 / 1100;
+    }
+  }
+</style>

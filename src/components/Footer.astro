@@ -1,0 +1,94 @@
+---
+import { person } from '../data/site';
+const a = person.address;
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-col loc">
+      <h2>Location</h2>
+      <address>
+        <p>{a.street}</p>
+        <p>{a.locality}, {a.region}, {a.country}</p>
+      </address>
+    </div>
+    <div class="footer-col contact">
+      <h2>Contact</h2>
+      <p><a href={`mailto:${person.email}`}>{person.email}</a></p>
+      <p>{person.phone}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding: 21px var(--inset) 0;
+  }
+
+  .footer-inner {
+    border-top: 1px solid var(--rule);
+    padding: 20px 0 19.6px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-family: var(--serif);
+    font-weight: 300;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: 0.05em;
+    font-weight: 400;
+  }
+
+  address {
+    font-style: normal;
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 22.4px;
+    /* Slightly tighter than Wix's 0.05em: Crimson Pro is a bit wider than Kepler. */
+    letter-spacing: 0.03em;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* Wide screens: same absolute column centres as the Wix footer (272px and 1155px from the rule's left end). */
+  @media (min-width: 1360px) {
+    .footer-inner {
+      display: block;
+      position: relative;
+      height: calc(1px + 20px + 28px + 2 * 22.4px + 19.6px);
+    }
+
+    .footer-col {
+      position: absolute;
+      top: 20px;
+      width: 400px;
+      transform: translateX(-50%);
+    }
+
+    .loc {
+      left: 272px;
+    }
+
+    .contact {
+      left: 1155px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .footer-inner {
+      grid-template-columns: 1fr;
+      row-gap: 20px;
+    }
+  }
+</style>

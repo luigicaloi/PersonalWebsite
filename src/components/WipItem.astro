@@ -1,0 +1,45 @@
+---
+import { joinNames, escapeHtml } from '../lib/inline-md';
+import type { Paper } from '../lib/papers';
+
+interface Props {
+  paper: Paper;
+}
+const d = Astro.props.paper.data;
+const names = d.coauthors.map((c) =>
+  c.url ? `<a href="${escapeHtml(c.url)}" target="_blank" rel="noopener">${escapeHtml(c.name)}</a>` : escapeHtml(c.name),
+);
+---
+
+<article class="wip" id={Astro.props.paper.id}>
+  <h3>{d.title}</h3>
+  {names.length > 0 && <p set:html={`With ${joinNames(names)}`} />}
+  {d.note && <p>{d.note}</p>}
+</article>
+
+<style>
+  h3 {
+    font-size: 30px;
+    line-height: 42px;
+  }
+
+  h3 + p {
+    margin-top: 10px;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  p :global(a) {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 900px) {
+    h3 {
+      font-size: 24px;
+      line-height: 32px;
+    }
+  }
+</style>

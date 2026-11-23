@@ -1,0 +1,103 @@
+---
+import { nav, site } from '../data/site';
+
+interface Props {
+  current: string;
+}
+const { current } = Astro.props;
+---
+
+<header class="site-header band-gray">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <nav aria-label="Main">
+    <ul>
+      {
+        nav.map((item) => (
+          <li>
+            <a href={item.href} aria-current={item.href === current ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+  <a class="site-name" href="/">{site.name}</a>
+</header>
+
+<style>
+  .site-header {
+    position: relative;
+    height: 159px;
+  }
+
+  nav ul {
+    position: absolute;
+    top: 48px;
+    /* Wix anchored the menu 806px left of the page centre. */
+    left: max(0px, calc(50% - 806px));
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  nav a {
+    display: block;
+    padding: 0 37px;
+    font-size: 18px;
+    line-height: 51px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  nav a:hover,
+  nav a[aria-current='page'] {
+    color: var(--text);
+  }
+
+  .site-name {
+    position: absolute;
+    top: 48px;
+    left: calc(50% + 27px);
+    transform: translateX(-50%);
+    font-size: 31px;
+    letter-spacing: 0.02em;
+    line-height: 38px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 1100px) {
+    .site-header {
+      height: auto;
+      padding: 28px 16px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    nav ul,
+    .site-name {
+      position: static;
+      transform: none;
+    }
+
+    .site-name {
+      order: -1;
+      font-size: 28px;
+    }
+
+    nav ul {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    nav a {
+      padding: 0 16px;
+      line-height: 40px;
+    }
+  }
+</style>

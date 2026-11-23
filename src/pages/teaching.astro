@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import { pages } from '../data/site';
+import { courses, teachingHeading } from '../data/teaching';
+import { graph, pageNode, courseNodes, personNode } from '../lib/schema';
+
+const page = pages.teaching;
+const jsonLd = graph(pageNode('WebPage', page.path, page.title, page.description, { hasPart: courseNodes() }), personNode());
+---
+
+<Base title={page.title} description={page.description} path={page.path} jsonLd={jsonLd}>
+  <h1 class="visually-hidden">Teaching</h1>
+  <section class="band-gray teaching">
+    <div class="container">
+      <h2>{teachingHeading}</h2>
+      {
+        courses.map((c) => (
+          <div class="course">
+            <h3>{c.name}</h3>
+            <p>
+              {c.level}, {c.department}, {c.institution}
+            </p>
+            <p>{c.role}</p>
+            <p>{c.terms}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .teaching {
+    padding: 29px 0 51px;
+  }
+
+  /* Wix placed this content 734px left of the page centre. */
+  .container {
+    margin-left: max(16px, calc(50% - 734px));
+    margin-right: 16px;
+  }
+
+  h2 {
+    font-size: 40px;
+    line-height: 57px;
+  }
+
+  h3,
+  p {
+    font-size: 22px;
+    line-height: 38px;
+  }
+
+  p {
+    padding-left: 40px;
+  }
+
+  .course + .course {
+    margin-top: 38px;
+  }
+
+  @media (max-width: 900px) {
+    h2 {
+      font-size: 30px;
+      line-height: 40px;
+      margin-bottom: 12px;
+    }
+
+    h3,
+    p {
+      font-size: 18px;
+      line-height: 28px;
+    }
+
+    p {
+      padding-left: 20px;
+    }
+
+    .course + .course {
+      margin-top: 24px;
+    }
+  }
+</style>
