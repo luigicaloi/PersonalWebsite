@@ -25,23 +25,22 @@ Cloudflare now calls Pages "legacy", so the site runs as a static-assets **Worke
 ```bash
 for p in /teaching-1 /items/x /_files/ugd/50b58f_caed96a1bb484ccf8dcd8a137e6090c7.pdf; do curl -sI "https://luigicaloi.luigicaloi.workers.dev$p" | grep -iE '^(HTTP|location)'; done
 ```
-- [ ] Turn on Web Analytics for the Worker (free, no cookies).
+- Web Analytics: turned on after cutover (step 4).
 
-## 3. Cloudflare DNS zone (prepare before the transfer finishes)
-- [ ] **Add a domain** → `luigicaloi.com` → Free plan. Cloudflare imports Wix's current records; leave them for now.
-- [ ] When asked about AI crawlers, choose **do not block**. Then double-check:
-  - Security → Bots: **Block AI bots = off**, Bot Fight Mode = off
-  - AI Crawl Control (if shown): all crawlers **allowed**
-  - "Managed robots.txt" / Content Signals: **off** (our own `robots.txt` already welcomes crawlers)
-- [ ] SSL/TLS → **Full**; Edge Certificates → **Always Use HTTPS = on**.
-- [ ] Note the two Cloudflare nameservers shown (e.g. `xxx.ns.cloudflare.com`).
+## 3. Cloudflare DNS zone (done Nov 23, 2026; zone is "pending" until the nameservers change)
+- [x] **Add a domain** → `luigicaloi.com` → Free plan.
+- [x] AI crawler policies (search, training, agents): **Allow**. Bot Preference Sync (Cloudflare text prepended to robots.txt): **off**. Bot Fight Mode and AI Labyrinth: **off**.
+- [x] Deleted the 4 imported Wix records (A `185.230.63.186`, `.171`, `.107`; CNAME `www` → `cdn3.wixdns.net`).
+- [x] Worker `luigicaloi` → Domains → custom domains **www.luigicaloi.com** and **luigicaloi.com** attached (Cloudflare creates their DNS records).
+- [x] Redirect rule "Redirect from root to WWW": `https://luigicaloi.com/*` → `https://www.luigicaloi.com/${1}`, 301, preserve query string.
+- [x] SSL/TLS → Edge Certificates → **Always Use HTTPS = on** (so `http://` is upgraded before the redirect).
+- Cloudflare nameservers for this zone: **`marty.ns.cloudflare.com`** and **`tricia.ns.cloudflare.com`**
 
 ## 4. Cutover (when Porkbun shows the domain as yours)
-- [ ] Porkbun → luigicaloi.com → **Authoritative nameservers** → replace with the two Cloudflare nameservers.
-- [ ] Wait for Cloudflare to mark the zone **Active** (minutes to a few hours).
-- [ ] Worker `luigicaloi` → **Settings → Domains & Routes → Add → Custom domain** → add `www.luigicaloi.com`, then `luigicaloi.com`. Cloudflare replaces the old Wix records automatically; delete any leftover A records pointing to `185.230.63.*` or CNAME to `wixdns.net`.
-- [ ] Rules → **Redirect Rules** → template "Redirect from root to WWW": `luigicaloi.com/*` → `https://www.luigicaloi.com/${1}`, 301, preserve query string.
-- [ ] Worker → Settings → Domains & Routes: turn **off** the `workers.dev` and preview URLs, so only www.luigicaloi.com is indexed.
+- [ ] Porkbun → luigicaloi.com → **Authoritative nameservers** → delete the Wix ones (`ns4.wixdns.net`, `ns5.wixdns.net`) and enter `marty.ns.cloudflare.com` and `tricia.ns.cloudflare.com`.
+- [ ] Wait for Cloudflare to mark the zone **Active** (minutes to a few hours). The site switches over automatically: domains, redirect and HTTPS are already configured.
+- [ ] Turn off the temporary addresses so only www.luigicaloi.com is indexed: add `"workers_dev": false` and `"preview_urls": false` to `wrangler.jsonc` and push.
+- [ ] Turn on Web Analytics for www.luigicaloi.com (free, no cookies).
 - [ ] Verify:
 ```bash
 curl -sI http://luigicaloi.com | grep -iE '^(HTTP|location)'
