@@ -2,7 +2,8 @@
 title: "With or Without Conditions? Equity–Efficiency Tradeoffs in Municipal Transfers in Brazil"
 status: working
 order: 2
-link: "https://www.dropbox.com/scl/fi/y0jyw995obxvv7d50ul9r/PerformanceTransfers.pdf?rlkey=pak7qjlsu7k88lqca2fm6w434&st=ebkbmblb&dl=0"
+link: /files/papers/with-or-without-conditions.pdf
+dateModified: 2026-01-22
 coauthors:
   - name: Andrea Ciccarone
     url: https://andreaciccarone.github.io/
